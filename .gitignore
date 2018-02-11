@@ -1,0 +1,5 @@
+.tern-port
+.tern-project
+.DS_Store
+node_modules
+/extension/src
