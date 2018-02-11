@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function Index() {
   const style = {
@@ -14,5 +14,5 @@ export default function Index() {
         Hello
       </h2>
     </div>
-  )
+  );
 }

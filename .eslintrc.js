@@ -4,8 +4,9 @@ module.exports = {
     "es6": true
   },
   "extends": [
-    "eslint:recommended",
     "airbnb",
+    "eslint:recommended",
+    "plugin:react/recommended",
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -17,7 +18,27 @@ module.exports = {
   "plugins": [
     "react"
   ],
+  "globals": {
+    "chrome": true,
+  },
   "rules": {
+    "arrow-parens": ["error", "always"],
+    "arrow-spacing": ["error"],
+    "arrow-body-style": ["error", "as-needed"],
+    "no-var": ["error"],
+    "prefer-const": ["error"],
+    "object-shorthand": ["error"],
+    "prefer-rest-params": ["error"],
+    "prefer-spread": ["error"],
+    "prefer-template": ["error"],
+    "template-curly-spacing": ["error"],
+    "consistent-return": ["error"],
+    "prefer-arrow-callback": ["error"],
+    "react/no-unused-prop-types": ["error", {skipShapeProps: true}],
+    "react/jsx-closing-bracket-location": ["error", "props-aligned"],
+    "react/jsx-boolean-value": ["error", "always"],
+    "react/require-extension": ["off"],
+    "import/extensions": ["error", {"jsx": "always"}],
     "quotes": [
       "error",
       "double"

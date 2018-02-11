@@ -1,5 +1,7 @@
 export default class Memo {
-  constructor({x, y, text, createdAt, updatedAt}) {
+  constructor({
+    x, y, text, createdAt, updatedAt,
+  }) {
     this.x = x;
     this.y = y;
     this.text = text || "";
@@ -7,7 +9,7 @@ export default class Memo {
     this.updatedAt = updatedAt || null;
   }
 
-  update({x, y, text}) {
+  update({ x, y, text }) {
     let isUpdated = false;
 
     if ((typeof text) === "string") {

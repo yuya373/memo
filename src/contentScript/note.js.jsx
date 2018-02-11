@@ -1,18 +1,16 @@
-import React, {Component} from 'react';
-import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
-import { withStyles } from 'material-ui/styles';
-import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
-import SaveIcon from 'material-ui-icons/save';
-import RemoveIcon from 'material-ui-icons/remove';
-import IconButton from 'material-ui/IconButton';
-import TextField from 'material-ui/TextField';
-import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
-import Collapse from 'material-ui/transitions/Collapse';
-import classnames from 'classnames';
+import React, { Component } from "react";
+import Typography from "material-ui/Typography";
+import { withStyles } from "material-ui/styles";
+import ExpandMoreIcon from "material-ui-icons/ExpandMore";
+import SaveIcon from "material-ui-icons/save";
+import RemoveIcon from "material-ui-icons/remove";
+import IconButton from "material-ui/IconButton";
+import TextField from "material-ui/TextField";
+import Card, { CardContent, CardActions } from "material-ui/Card";
+import Collapse from "material-ui/transitions/Collapse";
+import classnames from "classnames";
 
-const styles = theme => ({
+const styles = (theme) => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -22,40 +20,39 @@ const styles = theme => ({
     maxWidth: 400,
   },
   actions: {
-    display: 'flex',
+    display: "flex",
   },
   content: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
+    transform: "rotate(0deg)",
+    transition: theme.transitions.create("transform", {
       duration: theme.transitions.duration.shortest,
     }),
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   expandOpen: {
-    transform: 'rotate(180deg)',
+    transform: "rotate(180deg)",
   },
 });
 
 class Note extends Component {
   constructor(props) {
     super(props);
-    console.log("props", props);
-    const isOpen = props.memo.updatedAt ? false : true;
+    const isOpen = !props.memo.updatedAt;
     this.state = {
       isOpen,
       collapseIsOpen: isOpen,
       textField: {
         value: props.memo.text,
       },
-    }
+    };
   }
 
   renderTextField() {
-    const {isOpen, textField} = this.state;
-    const {classes} = this.props;
+    const { textField } = this.state;
+    const { classes } = this.props;
 
     const handleTextFieldChange = (e) => {
       const value = e.target.value;
@@ -64,9 +61,9 @@ class Note extends Component {
         textField: {
           ...s.textField,
           value,
-        }
+        },
       }));
-    }
+    };
 
     return (
       <CardContent className={classes.content}>
@@ -84,24 +81,24 @@ class Note extends Component {
   }
 
   renderCollapseButton() {
-    const {isOpen, textField} = this.state;
+    const { isOpen, textField } = this.state;
     const isTextFieldChanged =
           this.props.memo.text !== textField.value;
 
-    const handleClickButton = (e) => {
+    const handleClickButton = () => {
       if (isTextFieldChanged) {
-        this.props.onChangeMemo({text: textField.value});
+        this.props.onChangeMemo({ text: textField.value });
       }
 
       if (isOpen) {
-        this.setState((s) => ({...s, isOpen: false}));
+        this.setState((s) => ({ ...s, isOpen: false }));
       } else {
-        this.setState((s) => ({...s, isOpen: true}));
+        this.setState((s) => ({ ...s, isOpen: true }));
       }
     };
     const icon = isTextFieldChanged ?
-          <SaveIcon color="primary" /> :
-          <ExpandMoreIcon />;
+      <SaveIcon color="primary" /> :
+      <ExpandMoreIcon />;
 
     return (
       <IconButton
@@ -118,7 +115,7 @@ class Note extends Component {
   }
 
   renderMemoText() {
-    const {classes, memo} = this.props;
+    const { classes, memo } = this.props;
     if (this.state.collapseIsOpen) return null;
 
     return (
@@ -133,13 +130,13 @@ class Note extends Component {
   }
 
   render() {
-    const {classes, memo} = this.props;
+    const { classes, memo } = this.props;
     const handleCollapseClosed =
-          () => this.setState((s) => ({...s, collapseIsOpen: false}));
+          () => this.setState((s) => ({ ...s, collapseIsOpen: false }));
     const handleCollapseOpened =
-          () => this.setState((s) => ({...s, collapseIsOpen: true}));
+          () => this.setState((s) => ({ ...s, collapseIsOpen: true }));
     const handleClickRemoveButton =
-          (e) => this.props.onRemoveMemo();
+          () => this.props.onRemoveMemo();
 
     const date = memo.updatedAt || memo.createdAt;
 
@@ -148,7 +145,7 @@ class Note extends Component {
         <Card className={classes.card} >
           <CardActions
             className={classes.actions}
-            disableActionSpacing
+            disableActionSpacing={true}
             >
             <IconButton onClick={handleClickRemoveButton} >
               <RemoveIcon color="error" />
@@ -173,7 +170,7 @@ class Note extends Component {
           {this.renderMemoText()}
         </Card>
       </div>
-    )
+    );
   }
 }
 

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import MemoModel from './model/memo.js';
-import Note from './note.js.jsx';
+import React, { Component } from "react";
+import MemoModel from "./model/memo.js";
+import Note from "./note.js.jsx";
 import {
   fetchInitialMemos,
   requestSaveMemos,
-} from './../actions.js';
+} from "./../actions.js";
 
 export default class Index extends Component {
   constructor(props) {
@@ -18,20 +18,20 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener("resize", this.handleResize);
     this.handleResize();
     chrome.runtime.sendMessage(
       fetchInitialMemos(),
-      ({payload}) => {
+      ({ payload }) => {
         this.setState({
-          memos: payload.memos.map((e) => new MemoModel(e))
-        })
-      }
-    )
+          memos: payload.memos.map((e) => new MemoModel(e)),
+        });
+      },
+    );
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
   }
 
   handleResize() {
@@ -44,29 +44,29 @@ export default class Index extends Component {
       ...s,
       width,
       height,
-    }))
+    }));
   }
 
   saveMemos() {
-    const {memos} = this.state;
+    const { memos } = this.state;
     chrome.runtime.sendMessage(
-      requestSaveMemos({memos}),
-      (response) => console.log("updateBackground", response)
+      requestSaveMemos({ memos }),
+      (response) => console.log("updateBackground", response),
     );
   }
 
-  updateMemo(index, {text}) {
+  updateMemo(index, { text }) {
     this.setState(
       (s) => ({
         ...s,
         memos: s.memos.map((e, i) => {
           if (i === index) {
-            e.update({text});
+            e.update({ text });
           }
           return e;
         }),
       }),
-      () => this.saveMemos()
+      () => this.saveMemos(),
     );
   }
 
@@ -76,14 +76,14 @@ export default class Index extends Component {
         ...s,
         memos: s.memos.filter((e, i) => i !== index),
       }),
-      () => this.saveMemos()
+      () => this.saveMemos(),
     );
   }
 
   onClick(e) {
     const {
       /* clientX, clientY, screenX, screenY, */
-      pageX, pageY
+      pageX, pageY,
     } = e;
     // console.log(
     //   // "clientX", clientX,
@@ -94,13 +94,13 @@ export default class Index extends Component {
     //   "pageY", pageY
     // );
 
-    const memo = new MemoModel({x: pageX, y: pageY});
+    const memo = new MemoModel({ x: pageX, y: pageY });
     this.setState(
       (s) => ({
         ...s,
         memos: s.memos.concat([memo]),
       }),
-      () => this.saveMemos()
+      () => this.saveMemos(),
     );
   }
 
@@ -128,11 +128,11 @@ export default class Index extends Component {
           onRemoveMemo={handleRemove}
           />
       </div>
-    )
+    );
   }
 
   render() {
-    const {memos, width, height} = this.state;
+    const { memos, width, height } = this.state;
     const style = {
       position: "absolute",
       top: 0,
