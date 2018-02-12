@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development webpack --watch --config ./webpack.config.js",
-    "build": "NODE_ENV=production webpack --config ./webpack.config.js"
+    "build": "NODE_ENV=production webpack --config ./webpack.config.js",
+    "pack": "yarn run build && rm extension.zip; zip -r extension.zip extension"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
