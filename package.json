@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development webpack --watch --config ./webpack.config.js"
+    "dev": "NODE_ENV=development webpack --watch --config ./webpack.config.js",
+    "build": "NODE_ENV=production webpack --config ./webpack.config.js"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
