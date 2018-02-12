@@ -42,11 +42,22 @@ export default class Index extends Component {
     );
   }
 
+  subscribeConfigChange() {
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if (changes.config) {
+        this.setState((s) => ({
+          ...s,
+          isCanvasDisplayed: changes.config.newValue.isCanvasDisplayed,
+        }))
+      }
+    });
+  }
 
   componentDidMount() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
     this.fetchConfig(() => this.fetchMemos());
+    this.subscribeConfigChange();
   }
 
   componentWillUnmount() {
