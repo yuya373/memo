@@ -16,7 +16,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://developer.mozilla.org/*"],
+      "matches": ["<all_urls>"],
       "js": ["src/contentScript.bundle.js"]
     }
   ],
