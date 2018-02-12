@@ -97,11 +97,13 @@ class Note extends Component {
       }
     };
     const icon = isTextFieldChanged ?
-      <SaveIcon color="primary" /> :
+      <SaveIcon /> :
       <ExpandMoreIcon />;
+    const color = isTextFieldChanged ? "primary" : undefined;
 
     return (
       <IconButton
+        color={color}
         className={
           classnames(this.props.classes.expand, {
             [this.props.classes.expandOpen]: isOpen,
@@ -147,8 +149,11 @@ class Note extends Component {
             className={classes.actions}
             disableActionSpacing={true}
             >
-            <IconButton onClick={handleClickRemoveButton} >
-              <RemoveIcon color="error" />
+            <IconButton
+              color="secondary"
+              onClick={handleClickRemoveButton}
+              >
+              <RemoveIcon />
             </IconButton>
             <Typography
               variant="caption"
