@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CloseIcon from "material-ui-icons/Close"
+import CloseIcon from "material-ui-icons/Close";
 import IconButton from "material-ui/IconButton";
 import MemoModel from "./model/memo.js";
 import Note from "./note.js.jsx";
@@ -36,7 +36,7 @@ export default class Index extends Component {
           cb();
         }
       }
-    )
+    );
   }
 
   fetchMemos() {
@@ -54,7 +54,7 @@ export default class Index extends Component {
         this.setState((s) => ({
           ...s,
           config: changes.config.newValue,
-        }))
+        }));
         this.registerResizeHandler();
       }
     });
@@ -143,7 +143,7 @@ export default class Index extends Component {
         saveConfig({config: this.state.config}),
         (response) => console.log(response)
       )
-    )
+    );
   }
 
   onClick(e) {
@@ -230,7 +230,7 @@ export default class Index extends Component {
             color="secondary"
             onClick={handleCloseIconClick}
             >
-            <CloseIcon/>
+            <CloseIcon />
           </IconButton>
         </div>
         {memos.map((e, i) => this.renderMemo(e, i))}
