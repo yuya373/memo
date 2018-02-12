@@ -4,6 +4,7 @@ import Note from "./note.js.jsx";
 import {
   fetchInitialMemos,
   requestSaveMemos,
+  fetchConfig,
 } from "./../actions.js";
 
 export default class Index extends Component {
@@ -13,21 +14,39 @@ export default class Index extends Component {
       memos: [],
       width: 0,
       height: 0,
+      isCanvasDisplayed: false,
     };
     this.handleResize = this.handleResize.bind(this);
   }
 
+  fetchConfig(cb) {
+    chrome.runtime.sendMessage(
+      fetchConfig(),
+      ({ payload }) => {
+        const isCanvasDisplayed = payload.config.isCanvasDisplayed;
+        this.setState({isCanvasDisplayed});
+
+        if ((typeof cb) === "function") {
+          cb();
+        }
+      }
+    )
+  }
+
+  fetchMemos() {
+    chrome.runtime.sendMessage(
+      fetchInitialMemos(),
+      ({ payload }) => this.setState({
+        memos: payload.memos.map((e) => new MemoModel(e)),
+      })
+    );
+  }
+
+
   componentDidMount() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
-    chrome.runtime.sendMessage(
-      fetchInitialMemos(),
-      ({ payload }) => {
-        this.setState({
-          memos: payload.memos.map((e) => new MemoModel(e)),
-        });
-      },
-    );
+    this.fetchConfig(() => this.fetchMemos());
   }
 
   componentWillUnmount() {
@@ -132,7 +151,9 @@ export default class Index extends Component {
   }
 
   render() {
-    const { memos, width, height } = this.state;
+    const { memos, width, height, isCanvasDisplayed } = this.state;
+    if (!isCanvasDisplayed) return null;
+
     const style = {
       position: "absolute",
       top: 0,

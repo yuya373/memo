@@ -4,7 +4,41 @@ import {
   REQUEST_SAVE_MEMOS,
   SAVE_MEMOS_SUCCESS,
   SAVE_MEMOS_FAILED,
+  FETCH_CONFIG,
+  SEND_CONFIG,
+  SAVE_CONFIG,
+  SAVE_CONFIG_SUCCESS,
 } from "./types.js";
+
+export function fetchConfig() {
+  return {
+    type: FETCH_CONFIG,
+  };
+}
+
+export function sendConfig({ config }) {
+  return {
+    type: SEND_CONFIG,
+    payload: {
+      config,
+    },
+  };
+}
+
+export function saveConfig({ config }) {
+  return {
+    type: SAVE_CONFIG,
+    payload: {
+      config,
+    },
+  };
+}
+
+export function saveConfigSuccess() {
+  return {
+    type: SAVE_CONFIG_SUCCESS,
+  };
+}
 
 export function fetchInitialMemos() {
   return {
