@@ -22,6 +22,7 @@ export default class Index extends Component {
       },
     };
     this.handleResize = this.handleResize.bind(this);
+    this.raf = null;
   }
 
   fetchConfig(cb) {
@@ -29,6 +30,7 @@ export default class Index extends Component {
       fetchConfig(),
       ({ payload }) => {
         this.setState({config: payload.config});
+        this.registerResizeHandler();
 
         if ((typeof cb) === "function") {
           cb();
@@ -53,32 +55,44 @@ export default class Index extends Component {
           ...s,
           config: changes.config.newValue,
         }))
+        this.registerResizeHandler();
       }
     });
   }
 
+  registerResizeHandler() {
+    this.raf = window.requestAnimationFrame(this.handleResize);
+  }
+
+  removeResizeHandler() {
+    if (this.raf) {
+      window.cancelAnimationFrame(this.raf);
+    }
+  }
+
   componentDidMount() {
-    window.addEventListener("resize", this.handleResize);
-    this.handleResize();
     this.fetchConfig(() => this.fetchMemos());
     this.subscribeConfigChange();
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
+    this.removeResizeHandler();
   }
 
   handleResize() {
-    const {
-      width,
-      height,
-    } = document.documentElement.getBoundingClientRect();
+    if (this.state.config.isCanvasDisplayed) {
+      const height = document.documentElement.scrollHeight;
+      const width = document.documentElement.scrollWidth;
 
-    this.setState((s) => ({
-      ...s,
-      width,
-      height,
-    }));
+      if (height !== this.state.height || width !== this.state.width) {
+        this.setState((s) => ({
+          ...s,
+          width,
+          height,
+        }));
+      }
+      this.registerResizeHandler();
+    }
   }
 
   saveMemos() {
