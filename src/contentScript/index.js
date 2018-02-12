@@ -1,10 +1,13 @@
 import React, { Component } from "react";
+import CloseIcon from "material-ui-icons/Close"
+import IconButton from "material-ui/IconButton";
 import MemoModel from "./model/memo.js";
 import Note from "./note.js.jsx";
 import {
   fetchInitialMemos,
   requestSaveMemos,
   fetchConfig,
+  saveConfig,
 } from "./../actions.js";
 
 export default class Index extends Component {
@@ -14,7 +17,9 @@ export default class Index extends Component {
       memos: [],
       width: 0,
       height: 0,
-      isCanvasDisplayed: false,
+      config: {
+        isCanvasDisplayed: false,
+      },
     };
     this.handleResize = this.handleResize.bind(this);
   }
@@ -23,8 +28,7 @@ export default class Index extends Component {
     chrome.runtime.sendMessage(
       fetchConfig(),
       ({ payload }) => {
-        const isCanvasDisplayed = payload.config.isCanvasDisplayed;
-        this.setState({isCanvasDisplayed});
+        this.setState({config: payload.config});
 
         if ((typeof cb) === "function") {
           cb();
@@ -47,7 +51,7 @@ export default class Index extends Component {
       if (changes.config) {
         this.setState((s) => ({
           ...s,
-          isCanvasDisplayed: changes.config.newValue.isCanvasDisplayed,
+          config: changes.config.newValue,
         }))
       }
     });
@@ -110,6 +114,24 @@ export default class Index extends Component {
     );
   }
 
+  onClickClose(e) {
+    e.stopPropagation();
+
+    this.setState(
+      (s) => ({
+        ...s,
+        config: {
+          ...s.config,
+          isCanvasDisplayed: false,
+        },
+      }),
+      () => chrome.runtime.sendMessage(
+        saveConfig({config: this.state.config}),
+        (response) => console.log(response)
+      )
+    )
+  }
+
   onClick(e) {
     const {
       /* clientX, clientY, screenX, screenY, */
@@ -162,8 +184,8 @@ export default class Index extends Component {
   }
 
   render() {
-    const { memos, width, height, isCanvasDisplayed } = this.state;
-    if (!isCanvasDisplayed) return null;
+    const { memos, width, height, config } = this.state;
+    if (!config.isCanvasDisplayed) return null;
 
     const style = {
       position: "absolute",
@@ -176,12 +198,27 @@ export default class Index extends Component {
     };
 
     const handleClick = (e) => this.onClick(e);
+    const handleCloseIconClick = (e) => this.onClickClose(e);
 
     return (
       <div
         style={style}
         onClick={handleClick}
         >
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+          }}
+          >
+          <IconButton
+            color="secondary"
+            onClick={handleCloseIconClick}
+            >
+            <CloseIcon/>
+          </IconButton>
+        </div>
         {memos.map((e, i) => this.renderMemo(e, i))}
       </div>
     );
